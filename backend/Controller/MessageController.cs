@@ -21,7 +21,7 @@ namespace backend.Controller
         }
 
         [HttpGet("/api/conversations/{conversationId}/messages")]
-        public async Task<IActionResult> GetMessagesInConversation(int conversationId)
+        public async Task<IActionResult> GetMessagesInConversation([FromRoute] int conversationId)
         {
             var messages = await _messageRepo.GetMessagesInConversation(conversationId);
 
@@ -30,32 +30,23 @@ namespace backend.Controller
                 return NotFound("Messages not found");
             }
             ;
-
-            var messageDtos = messages.Select(m => new MessageDto
-            {
-                Id = m.Id,
-                Body = m.Body,
-                CreatedAt = m.CreatedAt,
-                ConversastionId = m.ConversastionId,
-                SenderId = m.SenderId,
-            });
+            var messageDtos = messages.Select(m => m.ToMessageDto());
 
             return Ok(messageDtos);
         }
 
+        [HttpPost("api/conversations/{conversationId}/messages")]
+        public async Task<IActionResult> SendMessageInConversation(
+            [FromRoute] int conversationId,
+            [FromBody] CreateMessageDto messageDto)
+        {
+            var message = messageDto.ToMessageFromCreateDto(conversationId); //How did the 'this' automatically pass it in as function?
 
+            await _messageRepo.CreateMessageAsync(message);
 
-
-        // [HttpGet]
-        // public async Task<IActionResult> GetAll()
-        // {
-        //     var messages = await _messageRepo.GetAllAsync();
-
-        //     var messageDto = messages.Select(s => s.ToMessageDto());
-
-        //     return Ok(messageDto);
-        // }
-
+            return Ok();
+        }
+     
 
     }
 }

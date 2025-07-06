@@ -18,7 +18,7 @@ namespace backend.Models
         // References
         // Maybe make these nullable first?
 
-        public int? ConversastionId { get; set; } // Foreign key
+        public int? ConversationId { get; set; } // Foreign key
 
         public int? SenderId { get; set; } // Foreign key
 

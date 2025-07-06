@@ -18,14 +18,27 @@ namespace backend.Repository
             _context = context;
         }
 
-        public async Task<List<Message>> GetMessagesInConversation(int conversationId)
+        public async Task CreateMessageAsync(Message message)
+        {
+            await _context.Messages.AddAsync(message);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<Message>?> GetMessagesInConversation(int conversationId)
         {
             var messages = await _context.Messages
-                .Where(m => m.ConversastionId == conversationId)
+                // .Include(m => m.Sender) // optional: if you want sender details
+                .Where(m => m.ConversationId == conversationId)
                 .OrderBy(m => m.CreatedAt)
                 .ToListAsync();
 
+
             return messages;
         }
+
+        // public async Task<List<Message>> GetAll()
+        // { 
+            
+        // }
     }
 }
