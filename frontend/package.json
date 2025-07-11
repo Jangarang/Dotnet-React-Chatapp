@@ -12,6 +12,7 @@
     "test:single": "node --loader ts-node/esm ./node_modules/jest/bin/jest.js"
   },
   "dependencies": {
+    "@microsoft/signalr": "^8.0.7",
     "@reduxjs/toolkit": "^2.8.2",
     "@tailwindcss/vite": "^4.1.8",
     "axios": "^1.10.0",

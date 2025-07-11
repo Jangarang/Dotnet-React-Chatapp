@@ -1,3 +1,17 @@
+import { HubConnectionBuilder } from "@microsoft/signalr";
+
+
+const connection = new HubConnectionBuilder()
+	.withUrl('http://localhost:5023/chatHub')
+	.withAutomaticReconnect()
+	.build();
+
+connection.start()
+	.then(() => console.log('Connected to SignalR hub'))
+	.catch(err => console.error('Connection failed:', err));
+
+
+
 const Message = ({ message }: { message?: any }) => {
 	const fromMe = message.fromMe;
 	const chatClass = fromMe ? "chat-end" : "chat-start";
@@ -6,6 +20,9 @@ const Message = ({ message }: { message?: any }) => {
 		: "https://avatar.iran.liara.run/public/boy?username=janedoe";
 
 	const bubbleBg = fromMe ? "bg-blue-500" : "";
+	connection.on("ReceiveMessage", (user, message) => {
+ 	 	console.log(`${user}: ${message}`);
+	});
 	return (
 		<div className={`chat ${chatClass}`}>
 			<div className='hidden md:block chat-image avatar'>
