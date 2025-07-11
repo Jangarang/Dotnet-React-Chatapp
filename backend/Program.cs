@@ -1,6 +1,10 @@
+using backend.Chathub;
 using backend.Data;
 using backend.Interfaces;
+using backend.Models;
 using backend.Repository;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +19,32 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+//Identity
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequiredLength = 12;
+})
+.AddEntityFrameworkStores<ApplicationDBContext>()
+.AddDefaultTokenProviders();
+
+//  options.DefaultAuthenticateScheme =
+//     options.DefaultChallengeScheme =
+//     options.DefaultForbidScheme =
+//     options.DefaultScheme =
+//     options.DefaultSignInScheme =
+//     options.DefaultSignOutScheme =
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+}).AddJwtBearer();
 
 //Dependency Injections
 builder.Services.AddScoped<IConversationRepository, ConversationRepository>();
@@ -45,5 +75,7 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 app.MapRazorPages().WithStaticAssets();
+
+app.MapHub<Chathub>("/chatHub");
 
 app.Run();

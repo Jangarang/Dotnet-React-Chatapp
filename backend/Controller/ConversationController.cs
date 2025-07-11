@@ -65,14 +65,7 @@ namespace backend.Controller
                 return NotFound("Conversation not found");
             }
 
-            var userDtos = users.Select(u => new UserInConversationDto
-            {
-                Id = u.Id,
-                Username = u.Username,
-                FullName = u.FullName,
-                Gender = u.Gender,
-                ProfilePic = u.ProfilePic,
-            }).ToList();
+            var userDtos = users.Select(u => u.ToUserDto()); 
 
             return Ok(userDtos);
         }

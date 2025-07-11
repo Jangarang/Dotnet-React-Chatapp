@@ -9,16 +9,19 @@ import type { RootState } from "./store";
 import SignUp from "./pages/Signup";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
-import ProtectedRoute from "./components/ProtectedRoute";
+// import ProtectedRoute from "./components/ProtectedRoute";
 import useTokenWatcher from "./hooks/useTokenWatcher";
 import Notification from './components/UI/Notification';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <ProtectedRoute>
+    
+    element: 
+    // <ProtectedRoute>
       <Home/>
-    </ProtectedRoute>,
+    // </ProtectedRoute>
+    ,
     id: 'root', 
   },
   {

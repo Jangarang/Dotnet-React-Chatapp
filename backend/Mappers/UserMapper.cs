@@ -12,7 +12,8 @@ namespace backend.Mappers
         public static UserInConversationDto ToUserDto(this User userModel)
         {
             return new UserInConversationDto
-            {
+            {   
+                Id = userModel.Id,
                 Username = userModel.Username,
                 FullName = userModel.FullName,
                 Gender = userModel.Gender,
